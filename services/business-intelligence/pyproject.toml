@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bi-service"
+version = "0.1.0"
+description = "Business Intelligence and RAG Domain for AI Co-Founder"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=0.4.22",
+    "sentence-transformers>=2.5.0",
+    "pydantic>=2.6.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-cofounder"
+version = "0.1.0"
+description = "AI Co-Founder: Autonomous Multi-Agent Venture Creation Platform"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "langgraph>=0.0.26",
+    "redis>=5.0.0",
+    "sqlalchemy>=2.0.0"
+]
+
+[tool.setuptools]
+packages = ["shared", "database", "evaluation"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "services/finance/tests"]
+pythonpath = [".", "services/orchestrator", "services/finance", "services/research", "services/business-intelligence", "services/marketing-output"]

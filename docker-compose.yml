@@ -42,6 +42,11 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/aicofounder
       - REDIS_URL=redis://redis:6379/0
+      - CHROMA_PERSIST_DIRECTORY=/data/chroma
+      - FRONTEND_URL=http://localhost:3000
+    volumes:
+      - .:/app
+      - chroma_data:/data/chroma
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,3 +68,4 @@ services:
 volumes:
   postgres_data:
   redis_data:
+  chroma_data:
