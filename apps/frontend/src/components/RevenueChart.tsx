@@ -1,1 +1,2 @@
-export const RevenueChart = () => <div>Revenue Chart</div>;
+export { RevenueProjectionsView as RevenueChart } from './results/RevenueProjectionsView';
+export { RevenueProjectionsView } from './results/RevenueProjectionsView';

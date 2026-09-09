@@ -1,1 +1,2 @@
-export const BusinessModel = () => <div>Business Model</div>;
+export { BusinessModelView as BusinessModel } from './results/BusinessModelView';
+export { BusinessModelView } from './results/BusinessModelView';
