@@ -1,1 +1,2 @@
-export const MarketResults = () => <div>Market Results</div>;
+export { MarketResearchView as MarketResults } from './results/MarketResearchView';
+export { MarketResearchView } from './results/MarketResearchView';
