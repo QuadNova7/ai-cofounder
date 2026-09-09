@@ -1,2 +1,2 @@
 -- Postgres Init Script
-CREATE DATABASE aicofounder;
+SELECT 'CREATE DATABASE aicofounder' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'aicofounder')\gexec
