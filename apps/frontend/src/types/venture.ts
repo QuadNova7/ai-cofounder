@@ -112,6 +112,7 @@ export interface RevenueEstimationOutput {
 
 export interface Milestone {
   month: number;
+  week?: number;
   focus: string;
   target_kpi: string;
   deliverables: string[];
@@ -125,6 +126,12 @@ export interface MarketingPlanOutput {
   acquisition_tactics: string[];
   budget_allocation: Record<string, number>;
   prioritized_next_actions: string[];
+  venture_archetype?: string;
+  target_cac?: number;
+  estimated_ltv?: number;
+  cac_payback_months?: number;
+  budget_breakdown_dollars?: Record<string, number>;
+  warnings?: string[];
 }
 
 export interface StartupRoadmap {
