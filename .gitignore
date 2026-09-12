@@ -53,3 +53,5 @@ dump.rdb
 *.swo
 .DS_Store
 Thumbs.db
+
+services/finance/Docs
