@@ -4,7 +4,6 @@ Exposes public entrypoint for Revenue Estimation and deterministic scenario calc
 All interactions from orchestrator or other agents must pass through this interface.
 """
 
-from typing import Optional, List
 from shared.contracts.idea import IdeaAnalysisOutput
 from shared.contracts.market import MarketResearchOutput
 from shared.contracts.business_model import BusinessModelOutput
@@ -15,10 +14,10 @@ from shared.contracts.revenue import (
 )
 
 try:
-    from services.finance.app.engine.calculator import calculate_projections
+    from services.finance.app.engine.scenario_engine import calculate_scenarios
     from services.finance.app.validation.invariants import verify_tam_sam_som
 except ImportError:
-    from app.engine.calculator import calculate_projections
+    from app.engine.scenario_engine import calculate_scenarios
     from app.validation.invariants import verify_tam_sam_som
 
 
@@ -39,32 +38,33 @@ def run_revenue_estimation(
         fixed_monthly_costs=5000.0
     )
 
-    # 1. Conservative: 70% growth, 130% churn
-    cons_projections = calculate_projections(
-        starting_customers=params.starting_customers,
-        monthly_price=params.monthly_price,
-        growth_rate=params.monthly_growth_rate * 0.7,
-        churn_rate=min(0.99, params.monthly_churn_rate * 1.3),
-        months=horizon_months
-    )
-
-    # 2. Moderate: Baseline parameters
-    mod_projections = calculate_projections(
+    base_inputs = dict(
         starting_customers=params.starting_customers,
         monthly_price=params.monthly_price,
         growth_rate=params.monthly_growth_rate,
         churn_rate=params.monthly_churn_rate,
-        months=horizon_months
+        months=horizon_months,
+        monthly_fixed_cost=params.fixed_monthly_costs,
+        monthly_cost_per_customer=params.cogs_per_unit,
     )
-
-    # 3. Optimistic: 140% growth, 80% churn
-    opt_projections = calculate_projections(
-        starting_customers=params.starting_customers,
-        monthly_price=params.monthly_price,
-        growth_rate=params.monthly_growth_rate * 1.4,
-        churn_rate=params.monthly_churn_rate * 0.8,
-        months=horizon_months
+    projections = calculate_scenarios(
+        # Conservative: 70% growth, 130% churn.
+        conservative={
+            **base_inputs,
+            "growth_rate": params.monthly_growth_rate * 0.7,
+            "churn_rate": min(0.99, params.monthly_churn_rate * 1.3),
+        },
+        moderate=base_inputs,
+        # Optimistic: 140% growth, 80% churn.
+        optimistic={
+            **base_inputs,
+            "growth_rate": params.monthly_growth_rate * 1.4,
+            "churn_rate": params.monthly_churn_rate * 0.8,
+        },
     )
+    cons_projections = projections["conservative"]
+    mod_projections = projections["moderate"]
+    opt_projections = projections["optimistic"]
 
     # Validate market scale invariant
     tam = market.tam_estimate or 1000000000.0
